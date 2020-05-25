@@ -41,6 +41,11 @@ class LoginController extends Controller
         return \Auth::user();
     }
 
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        return new Response([$this->username() => ["Пользователь не найден"]], 422);
+    }
+
     /**
      * Log the user out of the application.
      *
