@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -43,7 +44,8 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        Group::create($request->all());
+        
+        // Group::create($request->all());
     }
 
     /**

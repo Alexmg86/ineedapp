@@ -20,7 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('group', 'GroupController');
+Route::middleware(['hash'])->group(function () {
+    Route::resource('group', 'GroupController');
+});
+
 Route::get('/getUser', 'UserController@getUser');
 
 Route::get('/home', 'HomeController@index')->name('home');
