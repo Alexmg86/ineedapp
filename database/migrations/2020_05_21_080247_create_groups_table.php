@@ -20,6 +20,11 @@ class CreateGroupsTable extends Migration
             $table->integer('owner');
             $table->timestamps();
         });
+
+        Schema::create('group_user', function (Blueprint $table) {
+                $table->integer('group_id')->nullable();
+                $table->integer('user_id')->nullable();
+            });
     }
 
     /**
@@ -29,6 +34,7 @@ class CreateGroupsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('group_user');
         Schema::dropIfExists('groups');
     }
 }

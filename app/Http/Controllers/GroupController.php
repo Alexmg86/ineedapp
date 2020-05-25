@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
@@ -15,15 +16,10 @@ class GroupController extends Controller
      */
     public function index()
     {
-        // return \DB::table('groups')->first();
-        // return Group::all();
-        $groups = Group::all();
-        // $groupsNew = [];
-        // foreach ($groups as $group) {
-        //     $groupsNew[] = collect($group)->toArray();
-        // }
-        return $groups;
-        return ['all' => Group::all()];
+        if (Auth::check()) {
+            return Auth::user()->groups()->get();
+        }
+        return [];
     }
 
     /**
@@ -44,8 +40,14 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        
-        // Group::create($request->all());
+        $user = Auth::user();
+        $group = Group::create([
+            "name" => $request->name,
+            "code" => strtoupper(substr(md5(time()), 0, 8)),
+            "owner" => $user->id
+        ]);
+        $user->groups()->attach($group->id);
+        return $group->toArray();
     }
 
     /**
