@@ -3,18 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Good extends Model
+class Order extends Model
 {
-    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-    	'icon_id', 'group_id', 'name', 'price'
+    	'user_id', 'group_id', 'price'
     ];
 
     /**
@@ -23,6 +21,6 @@ class Good extends Model
      * @var array
      */
     protected $visible = [
-    	'icon_id', 'group_id', 'name', 'price'
+    	'user_id', 'group_id', 'price'
     ];
 }

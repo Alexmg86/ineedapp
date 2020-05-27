@@ -24,6 +24,7 @@ class CreateGroupsTable extends Migration
         Schema::create('group_user', function (Blueprint $table) {
             $table->integer('group_id')->nullable();
             $table->integer('user_id')->nullable();
+            $table->boolean('active');
         });
     }
 

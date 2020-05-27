@@ -46,7 +46,7 @@ class GroupController extends Controller
             "code" => strtoupper(substr(md5(time()), 0, 8)),
             "owner" => $user->id
         ]);
-        $user->groups()->attach($group->id);
+        $user->groups()->attach($group->id, ['active' => 1]);
         return $group->toArray();
     }
 
