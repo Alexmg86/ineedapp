@@ -15,8 +15,8 @@ class CreateGoodsTable extends Migration
     {
         Schema::create('goods', function (Blueprint $table) {
             $table->id();
-            $table->integer('icon_id', 2);
-            $table->integer('group_id', 8);
+            $table->tinyInteger('icon_id');
+            $table->smallInteger('group_id');
             $table->string('name');
             $table->float('price', 8, 2);
             $table->timestamps();
