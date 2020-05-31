@@ -21,6 +21,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['hash'])->group(function () {
+	Route::resource('good', 'GoodController');
     Route::resource('group', 'GroupController');
     Route::post('/updateUser', 'UserController@update');
 });

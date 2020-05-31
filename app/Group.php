@@ -21,6 +21,6 @@ class Group extends Model
      * @var array
      */
     protected $visible = [
-    	'name', 'code', 'owner'
+    	'name', 'code', 'owner', 'id'
     ];
 }
