@@ -25,4 +25,15 @@ class Good extends Model
     protected $visible = [
     	'icon_id', 'group_id', 'name', 'price'
     ];
+
+    public function getIconIdAttribute($value)
+    {
+        return (String)$value;
+    }
+
+    public function getPriceAttribute($value)
+    {
+        $value = (String)$value;
+        return str_replace('.', ',', $value);
+    }
 }

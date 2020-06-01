@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Good;
+use App\Group;
 use App\Http\Requests\GoodRequest;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class GoodController extends Controller
      */
     public function index()
     {
-        //
+        return Group::auth()->whereHas('goods')->with('goods')->get();
     }
 
     /**
