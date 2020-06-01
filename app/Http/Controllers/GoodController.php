@@ -72,7 +72,8 @@ class GoodController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Good::where('id', $id)->update($request->all());
+        return ['success' => true];
     }
 
     /**

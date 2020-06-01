@@ -22,8 +22,8 @@ class Good extends Model
      *
      * @var array
      */
-    protected $visible = [
-    	'icon_id', 'group_id', 'name', 'price'
+    protected $hidden = [
+        'created_at', 'updated_at', 'deleted_at'
     ];
 
     public function getIconIdAttribute($value)
