@@ -23,9 +23,8 @@ Route::get('/', function () {
 Route::middleware(['hash'])->group(function () {
 	Route::resource('good', 'GoodController');
     Route::resource('group', 'GroupController');
-    Route::post('/updateUser', 'UserController@update');
+    Route::resource('user', 'UserController');
+    Route::post('user/loginhash', 'UserController@loginhash');
 });
-
-Route::get('/getUser', 'UserController@getUser');
 
 Route::get('/home', 'HomeController@index')->name('home');

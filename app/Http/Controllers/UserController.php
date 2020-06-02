@@ -8,14 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function getUser()
+    public function index()
     {
     	return Auth::user();
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-    	Auth::user()->update($request->all());
+    	User::where('hash', $id)->update($request->all());
+    	return Auth::user();
+    }
+
+    public function loginhash(Request $request)
+    {
     	return Auth::user();
     }
 }
