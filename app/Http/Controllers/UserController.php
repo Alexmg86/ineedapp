@@ -16,7 +16,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
     	User::where('hash', $id)->update($request->all());
-    	return Auth::user();
+    	return User::where('hash', $id)->first();
     }
 
     public function loginhash(Request $request)
