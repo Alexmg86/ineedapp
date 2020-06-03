@@ -81,7 +81,8 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Group::where('id', $id)->update($request->only('name'));
+        return ['success' => true];
     }
 
     /**
