@@ -84,6 +84,7 @@ class GoodController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Good::where('id', $id)->delete();
+        return Group::auth()->whereHas('goods')->with('goods')->get();
     }
 }
