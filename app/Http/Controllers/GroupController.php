@@ -72,7 +72,9 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        Group::where('id', $id)->delete();
+        $group = Group::where('id', $id)->first();
+        $group->goods()->delete();
+        $group->delete();
         return Auth::user()->groups()->get();
     }
 }
