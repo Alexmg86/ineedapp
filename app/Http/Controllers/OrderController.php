@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -13,17 +15,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->getLastOrders();
     }
 
     /**
@@ -34,41 +26,13 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        Order::create([
+            'user_id' => Auth::id(),
+            'group_id' => $request->group,
+            'good_id' => $request->good,
+            'price' => $request->price
+        ]);
+        return ['success' => true];
     }
 
     /**
@@ -79,6 +43,16 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Order::where('id', $id)->delete();
+        return $this->getLastOrders();
+    }
+
+    private function getLastOrders()
+    {
+        $goods = Order::where('user_id', Auth::id())->limit(5)->get();
+        return [[
+            'name' => 'Последние покупки',
+            'goods' => $goods
+        ]];
     }
 }

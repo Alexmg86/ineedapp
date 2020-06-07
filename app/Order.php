@@ -12,7 +12,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-    	'user_id', 'group_id', 'price'
+    	'user_id', 'group_id', 'good_id', 'price'
     ];
 
     /**
@@ -21,6 +21,40 @@ class Order extends Model
      * @var array
      */
     protected $visible = [
-    	'user_id', 'group_id', 'price'
+    	'price', 'icon_id', 'name', 'created_at'
     ];
+
+    protected $appends = [
+        'icon_id', 'name'
+    ];
+
+    protected $with = [
+        'goods'
+    ];
+
+    public function goods()
+    {
+        return $this->belongsTo('App\Good', 'good_id', 'id');
+    }
+
+    public function getIconIdAttribute()
+    {
+        return $this->goods->icon_id;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->goods->name;
+    }
+
+    public function getPriceAttribute($value)
+    {
+        $value = (String)$value;
+        return str_replace('.', ',', $value);
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('d-m-Y');
+    }
 }
