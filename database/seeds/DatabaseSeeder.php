@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         $groups = Group::all();
         $goodNames = ['Кофе в зернах', 'Стакан молока', 'Кофе молотый', 'Чай в пакетиках', 'Печенька', 'Капучино'];
         foreach ($groups as $group) {
-        	for ($i=0; $i < 5; $i++) { 
+        	for ($i=1; $i < 6; $i++) { 
         		Good::create([
         			'icon_id' => $i,
         			'group_id' => $group->id,
