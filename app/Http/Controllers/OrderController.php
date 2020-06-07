@@ -32,7 +32,7 @@ class OrderController extends Controller
             'good_id' => $request->good,
             'price' => $request->price
         ]);
-        return ['success' => true];
+        return $this->getLastOrders();
     }
 
     /**
