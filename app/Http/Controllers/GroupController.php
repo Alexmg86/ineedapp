@@ -82,7 +82,7 @@ class GroupController extends Controller
             return [];
         }
         return [[
-            'name' => 'Группы в которых вы состоите',
+            'name' => 'Группы, в которых вы состоите',
             'items' => $items
         ]];
     }
