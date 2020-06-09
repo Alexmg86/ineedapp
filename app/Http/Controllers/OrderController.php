@@ -15,7 +15,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return $this->getLastOrders();
+        return $this->getItems();
     }
 
     /**
@@ -32,7 +32,7 @@ class OrderController extends Controller
             'good_id' => $request->good,
             'price' => $request->price
         ]);
-        return $this->getLastOrders();
+        return $this->getItems();
     }
 
     /**
@@ -44,13 +44,13 @@ class OrderController extends Controller
     public function destroy($id)
     {
         Order::where('id', $id)->delete();
-        return $this->getLastOrders();
+        return $this->getItems();
     }
 
-    private function getLastOrders()
+    private function getItems()
     {
-        $items = Order::where('user_id', Auth::id())->orderByDesc('id')->limit(5)->get();
-        if (!$items) {
+        $items = Order::where('user_id', Auth::id())->orderByDesc('id')->limit(10)->get();
+        if ($items->count == 0) {
             return [];
         }
         return [[
