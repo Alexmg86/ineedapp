@@ -72,7 +72,7 @@ class GroupController extends Controller
         $group = Group::where('id', $id)->first();
         $group->goods()->delete();
         $group->delete();
-        return Auth::user()->groups()->get();
+        return $this->getItems();
     }
 
     public function getItems()
