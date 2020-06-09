@@ -78,7 +78,7 @@ class GroupController extends Controller
     public function getItems()
     {
         $items = Group::auth()->withCount('usersActive as count')->get();
-        if ($items->count == 0) {
+        if ($items->count() == 0) {
             return [];
         }
         return [[

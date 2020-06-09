@@ -50,7 +50,7 @@ class OrderController extends Controller
     private function getItems()
     {
         $items = Order::where('user_id', Auth::id())->orderByDesc('id')->limit(10)->get();
-        if ($items->count == 0) {
+        if ($items->count() == 0) {
             return [];
         }
         return [[
