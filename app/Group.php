@@ -24,7 +24,11 @@ class Group extends Model
      * @var array
      */
     protected $visible = [
-    	'name', 'code', 'owner', 'id', 'goods'
+    	'name', 'code', 'is_owner', 'id', 'goods', 'count'
+    ];
+
+    protected $appends = [
+        'is_owner'
     ];
 
     public function goods()
@@ -35,6 +39,16 @@ class Group extends Model
     public function users()
     {
         return $this->belongsToMany('App\User');
+    }
+
+    public function usersActive()
+    {
+        return $this->belongsToMany('App\User')->wherePivot('active', 1);
+    }
+
+    public function getIsOwnerAttribute()
+    {
+        return $this->owner == \Auth::id();
     }
 
     public function scopeAuth($query)

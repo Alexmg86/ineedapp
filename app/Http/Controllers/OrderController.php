@@ -49,10 +49,13 @@ class OrderController extends Controller
 
     private function getLastOrders()
     {
-        $goods = Order::where('user_id', Auth::id())->orderByDesc('id')->limit(5)->get();
+        $items = Order::where('user_id', Auth::id())->orderByDesc('id')->limit(5)->get();
+        if (!$items) {
+            return [];
+        }
         return [[
             'name' => 'Последние покупки',
-            'goods' => $goods
+            'items' => $items
         ]];
     }
 }

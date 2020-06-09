@@ -16,10 +16,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            return Auth::user()->groups()->get();
-        }
-        return [];
+        return $this->getItems();
     }
 
     /**
@@ -76,5 +73,17 @@ class GroupController extends Controller
         $group->goods()->delete();
         $group->delete();
         return Auth::user()->groups()->get();
+    }
+
+    public function getItems()
+    {
+        $items = Group::auth()->withCount('usersActive as count')->get();
+        if (!$items) {
+            return [];
+        }
+        return [[
+            'name' => 'Группы в которых вы состоите',
+            'items' => $items
+        ]];
     }
 }
