@@ -22,8 +22,22 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('123456'),
             'hash' => Str::random(32),
         ]);
+        User::create([
+            'name' => 'Гость 1',
+            'email' => 'test1@mail.ru',
+            'password' => Hash::make('123456'),
+            'hash' => Str::random(32),
+        ]);
+        User::create([
+            'name' => 'Гость 2',
+            'email' => 'test2@mail.ru',
+            'password' => Hash::make('123456'),
+            'hash' => Str::random(32),
+        ]);
 
-        $user = user::find(1);
+        $user = User::find(1);
+        $user1 = User::find(2);
+        $user2 = User::find(3);
 
         $groupsName = ['Группа 1', 'Группа 2'];
 
@@ -34,6 +48,8 @@ class DatabaseSeeder extends Seeder
         		"owner" => $user->id
         	]);
         	$user->groups()->attach($group->id, ['active' => 1]);
+            $user1->groups()->attach($group->id, ['active' => 1]);
+            $user2->groups()->attach($group->id, ['active' => 1]);
         }
 
         $groups = Group::all();
