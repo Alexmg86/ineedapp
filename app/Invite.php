@@ -12,7 +12,7 @@ class Invite extends Model
      * @var array
      */
     protected $fillable = [
-    	'group_id', 'user_id'
+        'group_id', 'user_id'
     ];
 
     /**
@@ -21,6 +21,6 @@ class Invite extends Model
      * @var array
      */
     protected $visible = [
-    	'group_id', 'user_id'
+        'group_id', 'user_id'
     ];
 }

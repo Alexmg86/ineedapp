@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Good extends Model
 {
     use SoftDeletes;
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-    	'icon_id', 'group_id', 'name', 'price'
+        'icon_id', 'group_id', 'name', 'price'
     ];
 
     /**
@@ -28,12 +29,12 @@ class Good extends Model
 
     public function getIconIdAttribute($value)
     {
-        return (String)$value;
+        return (string)$value;
     }
 
     public function getPriceAttribute($value)
     {
-        $value = (String)$value;
+        $value = (string)$value;
         return str_replace('.', ',', $value);
     }
 }

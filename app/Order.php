@@ -12,7 +12,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-    	'user_id', 'group_id', 'good_id', 'price'
+        'user_id', 'group_id', 'good_id', 'price'
     ];
 
     /**
@@ -21,7 +21,7 @@ class Order extends Model
      * @var array
      */
     protected $visible = [
-    	'price', 'icon_id', 'name', 'created_at'
+        'price', 'icon_id', 'name', 'created_at'
     ];
 
     protected $appends = [
@@ -49,7 +49,7 @@ class Order extends Model
 
     public function getPriceAttribute($value)
     {
-        $value = (String)$value;
+        $value = (string)$value;
         return str_replace('.', ',', $value);
     }
 

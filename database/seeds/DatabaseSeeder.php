@@ -42,12 +42,12 @@ class DatabaseSeeder extends Seeder
         $groupsName = ['Группа 1', 'Группа 2'];
 
         foreach ($groupsName as $groupName) {
-        	$group = Group::create([
-        		"name" => $groupName,
-        		"code" => strtoupper(substr(md5(time()), 0, 8)),
-        		"owner" => $user->id
-        	]);
-        	$user->groups()->attach($group->id, ['active' => 1]);
+            $group = Group::create([
+                "name" => $groupName,
+                "code" => strtoupper(substr(md5(time()), 0, 8)),
+                "owner" => $user->id
+            ]);
+            $user->groups()->attach($group->id, ['active' => 1]);
             $user1->groups()->attach($group->id, ['active' => 1]);
             $user2->groups()->attach($group->id, ['active' => 1]);
         }
@@ -55,14 +55,14 @@ class DatabaseSeeder extends Seeder
         $groups = Group::all();
         $goodNames = ['Кофе в зернах', 'Стакан молока', 'Кофе молотый', 'Чай в пакетиках', 'Печенька', 'Капучино'];
         foreach ($groups as $group) {
-        	for ($i=1; $i < 6; $i++) { 
-        		Good::create([
-        			'icon_id' => $i,
-        			'group_id' => $group->id,
-        			'name' => $goodNames[array_rand($goodNames, 1)], 
-        			'price' => rand(10, 150)
-        		]);
-        	}
+            for ($i = 1; $i < 6; $i++) {
+                Good::create([
+                    'icon_id' => $i,
+                    'group_id' => $group->id,
+                    'name' => $goodNames[array_rand($goodNames, 1)],
+                    'price' => rand(10, 150)
+                ]);
+            }
         }
     }
 }

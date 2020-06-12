@@ -10,17 +10,17 @@ class UserController extends Controller
 {
     public function index()
     {
-    	return Auth::user();
+        return Auth::user();
     }
 
     public function update(Request $request, $id)
     {
-    	User::where('hash', $id)->update($request->all());
-    	return User::where('hash', $id)->first();
+        User::where('hash', $id)->update($request->all());
+        return User::where('hash', $id)->first();
     }
 
     public function loginhash(Request $request)
     {
-    	return Auth::user();
+        return Auth::user();
     }
 }
