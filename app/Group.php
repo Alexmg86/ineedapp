@@ -9,23 +9,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Group extends Model
 {
     use SoftDeletes;
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $fillable = [
-        'name', 'code', 'owner'
+        'name',
+        'code',
+        'owner'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $visible = [
-        'name', 'code', 'is_owner', 'id', 'goods', 'count', 'users'
+        'name',
+        'code',
+        'is_owner',
+        'id',
+        'goods',
+        'count',
+        'users'
     ];
 
     protected $appends = [

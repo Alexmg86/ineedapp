@@ -77,6 +77,7 @@ class DatabaseSeeder extends Seeder
 
         Payment::create([
             'user_id' => 3,
+            'group_id' => 2,
             'payment' => 10
         ]);
     }

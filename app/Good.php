@@ -15,7 +15,10 @@ class Good extends Model
      * @var array
      */
     protected $fillable = [
-        'icon_id', 'group_id', 'name', 'price'
+        'icon_id',
+        'group_id',
+        'name',
+        'price'
     ];
 
     /**
@@ -24,7 +27,9 @@ class Good extends Model
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     public function getIconIdAttribute($value)
