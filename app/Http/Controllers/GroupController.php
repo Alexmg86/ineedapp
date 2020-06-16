@@ -46,7 +46,18 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        return Group::where('id', $id)->with('users:name,email')->first();
+        $data = Group::where('id', $id)->with(['users' => function ($query) {
+            $query->select('name', 'email')->withSum(['orders:price as credit', 'payments:payment as debit']);
+        }])->first();
+        $data->users = $data->users->map(function ($item, $key) {
+            if ($item['debit'] != null && $item['credit'] != null) {
+                return $item['total'] = $item->debit - $item->credit;
+            } else {
+                return $item['total'] = 0;
+            }
+            return $item;
+        });
+        return $data;
     }
 
     /**

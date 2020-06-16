@@ -2,6 +2,8 @@
 
 use App\Good;
 use App\Group;
+use App\Order;
+use App\Payment;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -64,5 +66,18 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        $group = Group::with('goods')->find(2);
+        Order::create([
+            'user_id' => 3,
+            'group_id' => 2,
+            'good_id' => $group->goods->first()->id,
+            'price' => $group->goods->first()->price
+        ]);
+
+        Payment::create([
+            'user_id' => 3,
+            'payment' => 10
+        ]);
     }
 }
