@@ -25,7 +25,7 @@ class Group extends Model
      * @var array
      */
     protected $visible = [
-        'name', 'code', 'is_owner', 'id', 'goods', 'count'
+        'name', 'code', 'is_owner', 'id', 'goods', 'count', 'users'
     ];
 
     protected $appends = [

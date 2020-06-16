@@ -6,6 +6,7 @@ use App\Group;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class GroupController extends Controller
 {
@@ -45,7 +46,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        //
+        return Group::where('id', $id)->with('users:name,email')->first();
     }
 
     /**
