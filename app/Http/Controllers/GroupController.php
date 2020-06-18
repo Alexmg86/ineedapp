@@ -46,7 +46,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $data = Group::where('id', $id)->with(['users' => function ($query) use ($id) {
+        $data = Group::find($id)->auth()->with(['users' => function ($query) use ($id) {
             $query->select('name', 'email')
             ->withSum(['orders:price as credit' => function (Builder $query) use ($id) {
                 $query->where('group_id', $id);
@@ -55,6 +55,7 @@ class GroupController extends Controller
                 $query->where('group_id', $id);
             }]);
         }])->first();
+
         $data->users = $data->users->map(function ($item, $key) {
             if ($item['debit'] != null && $item['credit'] != null) {
                 return $item['total'] = $item->debit - $item->credit;
@@ -63,7 +64,7 @@ class GroupController extends Controller
             }
             return $item;
         });
-        return $data;
+        return [$data];
     }
 
     /**

@@ -43,10 +43,10 @@ class DatabaseSeeder extends Seeder
 
         $groupsName = ['Группа 1', 'Группа 2'];
 
-        foreach ($groupsName as $groupName) {
+        foreach ($groupsName as $key => $groupName) {
             $group = Group::create([
                 "name" => $groupName,
-                "code" => strtoupper(substr(md5(time()), 0, 8)),
+                "code" => strtoupper(substr(md5(time() + $key), 0, 8)),
                 "owner" => $user->id
             ]);
             $user->groups()->attach($group->id, ['active' => 1]);
