@@ -57,11 +57,7 @@ class GroupController extends Controller
         }])->first();
 
         $data->users = $data->users->map(function ($item, $key) {
-            if ($item['debit'] != null && $item['credit'] != null) {
-                return $item['total'] = $item->debit - $item->credit;
-            } else {
-                return $item['total'] = 0;
-            }
+            return $item['total'] = (int)$item->debit - (int)$item->credit;
             return $item;
         });
         return [$data];
