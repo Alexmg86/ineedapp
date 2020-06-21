@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\Order;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
@@ -46,7 +48,9 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $data = Group::find($id)->auth()->with(['users' => function ($query) use ($id) {
+        $stat = [];
+        $data = Group::find($id)->auth()
+        ->with(['users' => function ($query) use ($id) {
             $query->select('name', 'email')
             ->withSum(['orders:price as credit' => function (Builder $query) use ($id) {
                 $query->where('group_id', $id);
@@ -56,11 +60,25 @@ class GroupController extends Controller
             }]);
         }])->first();
 
+        $stat['user'] = null;
+        $maxCredit = $data->users->sortByDesc('credit')->first();
+        $stat['total'] = $data->users->sum('credit');
+        if ($maxCredit->credit != null) {
+            $stat['user'] = $maxCredit;
+        }
+
         $data->users = $data->users->map(function ($item, $key) {
             return $item['total'] = (int)$item->debit - (int)$item->credit;
             return $item;
         });
-        return [$data];
+
+        $stat['good']  = DB::table('orders')->groupBy('good_id')
+        ->addSelect('goods.icon_id', 'goods.name', DB::raw('count(*) as total'))
+        ->leftJoin('goods', 'goods.id', '=', 'orders.good_id')
+        ->orderByDesc('total')->limit(1)->get();
+
+        return ["users" => [$data], "stats" => [$stat]];
+        // return [$data];
     }
 
     /**
