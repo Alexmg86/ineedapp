@@ -62,7 +62,7 @@ class GroupController extends Controller
 
         $stat['user'] = null;
         $maxCredit = $data->users->sortByDesc('credit')->first();
-        $stat['total'] = $data->users->sum('credit');
+        $stat['total'] = (string)$data->users->sum('credit');
         if ($maxCredit->credit != null) {
             $stat['user'] = $maxCredit;
         }
@@ -72,11 +72,11 @@ class GroupController extends Controller
             return $item;
         });
 
-        $stat['good']  = DB::table('orders')->where('orders.group_id', $id)
+        $stat['good'] = DB::table('orders')->where('orders.group_id', $id)
         ->addSelect('goods.icon_id', 'goods.name', 'orders.good_id', DB::raw('count(*) as total'))
         ->leftJoin('goods', 'goods.id', '=', 'orders.good_id')
         ->groupBy('orders.good_id')
-        ->orderByDesc('total')->limit(1)->get();
+        ->orderByDesc('total')->first();
 
         return ["users" => [$data], "stats" => [$stat]];
     }
