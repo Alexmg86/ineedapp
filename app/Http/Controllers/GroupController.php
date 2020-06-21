@@ -51,7 +51,7 @@ class GroupController extends Controller
         $stat = [];
         $data = Group::find($id)->auth()
         ->with(['users' => function ($query) use ($id) {
-            $query->select('name', 'email')
+            $query->select('name', 'email', 'id')
             ->withSum(['orders:price as credit' => function (Builder $query) use ($id) {
                 $query->where('group_id', $id);
             }])
@@ -78,7 +78,6 @@ class GroupController extends Controller
         ->orderByDesc('total')->limit(1)->get();
 
         return ["users" => [$data], "stats" => [$stat]];
-        // return [$data];
     }
 
     /**
