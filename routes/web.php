@@ -21,11 +21,11 @@ Route::get('/', function () {
 });
 
 Route::middleware(['hash'])->group(function () {
-	Route::resource('good', 'GoodController');
+    Route::resource('good', 'GoodController');
     Route::resource('group', 'GroupController');
     Route::resource('order', 'OrderController');
     Route::resource('user', 'UserController');
     Route::post('user/loginhash', 'UserController@loginhash');
 });
-
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/home', 'HomeController@index')->name('home');
