@@ -72,9 +72,10 @@ class GroupController extends Controller
             return $item;
         });
 
-        $stat['good']  = DB::table('orders')->groupBy('good_id')
+        $stat['good']  = DB::table('orders')->where('orders.group_id', $id)
         ->addSelect('goods.icon_id', 'goods.name', DB::raw('count(*) as total'))
         ->leftJoin('goods', 'goods.id', '=', 'orders.good_id')
+        ->groupBy('orders.good_id')
         ->orderByDesc('total')->limit(1)->get();
 
         return ["users" => [$data], "stats" => [$stat]];
