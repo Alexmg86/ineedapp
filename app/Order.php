@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -37,6 +38,11 @@ class Order extends Model
         return $this->belongsTo('App\Good', 'good_id', 'id');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
+
     public function getIconIdAttribute()
     {
         return $this->goods->icon_id;
@@ -56,5 +62,16 @@ class Order extends Model
     public function getCreatedAtAttribute($value)
     {
         return \Carbon\Carbon::parse($value)->format('d-m-Y');
+    }
+
+    public function scopeAuth($query, $hash = null)
+    {
+        return $query->whereHas('users', function (Builder $query) use ($hash) {
+            $query->when($hash, function ($query, $hash) {
+                return $query->where('hash', $hash);
+            }, function ($query) {
+                return $query->where('id', \Auth::id());
+            });
+        });
     }
 }

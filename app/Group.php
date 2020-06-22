@@ -50,10 +50,14 @@ class Group extends Model
         return $this->owner == \Auth::id();
     }
 
-    public function scopeAuth($query)
+    public function scopeAuth($query, $hash = null)
     {
-        return $query->whereHas('users', function (Builder $query) {
-            $query->where('id', \Auth::id());
+        return $query->whereHas('users', function (Builder $query) use ($hash) {
+            $query->when($hash, function ($query, $hash) {
+                return $query->where('hash', $hash);
+            }, function ($query) {
+                return $query->where('id', \Auth::id());
+            });
         });
     }
 }

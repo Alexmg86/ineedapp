@@ -26,6 +26,7 @@ Route::middleware(['hash'])->group(function () {
     Route::resource('order', 'OrderController');
     Route::resource('user', 'UserController');
     Route::post('user/loginhash', 'UserController@loginhash');
+    Route::post('user/getstat', 'UserController@getstat');
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/home', 'HomeController@index')->name('home');

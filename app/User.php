@@ -36,9 +36,7 @@ class User extends Authenticatable
         'updated_at',
         'email_verified_at',
         'id',
-        'pivot',
-        'credit',
-        'debit'
+        'pivot'
     ];
 
     /**
