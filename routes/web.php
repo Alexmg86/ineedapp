@@ -21,6 +21,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['hash'])->group(function () {
+    Route::resource('access', 'AccessController');
     Route::resource('good', 'GoodController');
     Route::resource('group', 'GroupController');
     Route::resource('order', 'OrderController');

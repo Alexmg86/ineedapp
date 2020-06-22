@@ -48,6 +48,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function acceses()
+    {
+        return $this->hasMany('App\Access');
+    }
+
     public function groups()
     {
         return $this->belongsToMany('App\Group');
