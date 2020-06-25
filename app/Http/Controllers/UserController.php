@@ -47,6 +47,8 @@ class UserController extends Controller
             $query->where('group_id', $group_id);
         }])->first();
 
+        $userInfo->total = (int)$userInfo->debit - (int)$userInfo->credit;
+
         if ($userInfo) {
             $is_owner = $userInfo->owner == $userInfo->id ? true : false;
             $userInfo["roles"] = Role::when(!$is_owner, function ($query) use ($group_id, $userInfo) {
