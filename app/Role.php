@@ -12,24 +12,11 @@ class Role extends Model
 
     protected $hidden = [
         'created_at',
-        'updated_at',
-        'acceses'
-    ];
-
-    protected $appends = [
-        'can'
+        'updated_at'
     ];
 
     public function acceses()
     {
         return $this->hasMany('App\Access');
-    }
-
-    public function getCanAttribute()
-    {
-        if ($this->acceses->first()) {
-            return true;
-        }
-        return false;
     }
 }

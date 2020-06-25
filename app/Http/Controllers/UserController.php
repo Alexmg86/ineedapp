@@ -42,16 +42,23 @@ class UserController extends Controller
         }])
         ->with(['payments' => function ($query) use ($group_id) {
             $query->where('group_id', $group_id)->limit(10);
+        }])
+        ->withMax(['groups:owner as owner' => function ($query) use ($group_id) {
+            $query->where('group_id', $group_id);
         }])->first();
 
         if ($userInfo) {
-            $userInfo["roles"] = Role::with(['acceses' => function ($query) use ($group_id, $userInfo) {
-                $query->where([['group_id', $group_id], ['user_id', $userInfo->id]]);
-            }])->get();
+            $is_owner = $userInfo->owner == $userInfo->id ? true : false;
+            $userInfo["roles"] = Role::when(!$is_owner, function ($query) use ($group_id, $userInfo) {
+                return $query->withCount(['acceses' => function ($query) use ($group_id, $userInfo) {
+                    $query->where([['group_id', $group_id], ['user_id', $userInfo->id]]);
+                }]);
+            })->get()->map(function ($item, $key) use ($is_owner) {
+                $item->can = $is_owner || $item->acceses_count ? true : false;
+                return $item;
+            });
         }
 
         return $userInfo;
-        return $request->all();
-        // return User::where('hash', $id)->first();
     }
 }

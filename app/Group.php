@@ -23,11 +23,8 @@ class Group extends Model
         'id',
         'goods',
         'count',
-        'users'
-    ];
-
-    protected $appends = [
-        'is_owner'
+        'users',
+        'owner'
     ];
 
     public function goods()
@@ -43,11 +40,6 @@ class Group extends Model
     public function usersActive()
     {
         return $this->belongsToMany('App\User')->wherePivot('active', 1);
-    }
-
-    public function getIsOwnerAttribute()
-    {
-        return $this->owner == \Auth::id();
     }
 
     public function scopeAuth($query, $hash = null)

@@ -26,6 +26,7 @@ Route::middleware(['hash'])->group(function () {
     Route::resource('group', 'GroupController');
     Route::resource('order', 'OrderController');
     Route::resource('user', 'UserController');
+    Route::resource('payment', 'PaymentController');
     Route::post('user/loginhash', 'UserController@loginhash');
     Route::post('user/getstat', 'UserController@getstat');
 });
