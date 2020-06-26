@@ -22,4 +22,10 @@ class Payment extends Model
     {
         return \Carbon\Carbon::parse($value)->format('d-m-Y');
     }
+
+    public function getPaymentAttribute($value)
+    {
+        $value = (string)$value;
+        return str_replace('.', ',', $value);
+    }
 }
