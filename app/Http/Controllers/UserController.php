@@ -59,6 +59,7 @@ class UserController extends Controller
                 $item->can = $is_owner || $item->acceses_count ? true : false;
                 return $item;
             });
+            $userInfo->owner = $is_owner;
         }
 
         return $userInfo;
