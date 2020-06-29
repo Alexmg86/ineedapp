@@ -7,6 +7,7 @@ use App\Order;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -49,8 +50,8 @@ class GroupController extends Controller
     public function show($id)
     {
         $stat = [];
-        $data = Group::find($id)->auth()
-        ->with(['users' => function ($query) use ($id) {
+        $group = $this->checkCan($id);
+        $data = $group->with(['users' => function ($query) use ($id) {
             $query->select('name', 'hash', 'email')
             ->withSum(['orders:price as credit' => function (Builder $query) use ($id) {
                 $query->where('group_id', $id);
@@ -90,7 +91,8 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Group::where('id', $id)->update($request->only('name'));
+        $group = $this->checkCan($id);
+        $group->update($request->only('name'));
         return ['success' => true];
     }
 
@@ -102,7 +104,7 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = Group::where('id', $id)->first();
+        $group = $this->checkCan($id);
         $group->goods()->delete();
         $group->delete();
         return $this->getItems();
@@ -118,5 +120,15 @@ class GroupController extends Controller
             'name' => 'Группы, в которых вы состоите',
             'items' => $items
         ]];
+    }
+
+    private function checkCan($id)
+    {
+        $group = Group::auth()->find($id);
+        if (!$group) {
+            abort(422, "У вас нет доступа");
+        } else {
+            return $group;
+        }
     }
 }

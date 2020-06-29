@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $this->checkCan($request->group);
         Order::create([
             'user_id' => Auth::id(),
             'group_id' => $request->group,
@@ -43,7 +45,11 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        Order::where('id', $id)->delete();
+        $order = Order::find($id);
+        if ($order) {
+            $this->checkCan($order->group_id);
+            $order->delete();
+        }
         return $this->getItems();
     }
 
@@ -57,5 +63,15 @@ class OrderController extends Controller
             'name' => 'Последние покупки',
             'items' => $items
         ]];
+    }
+
+    private function checkCan($id)
+    {
+        $group = Group::auth()->find($id);
+        if (!$group) {
+            abort(422, "У вас нет доступа");
+        } else {
+            return $group;
+        }
     }
 }

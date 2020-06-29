@@ -47,7 +47,7 @@ class RegisterController extends Controller
         if ($response = $this->registered($request, $user)) {
             return $response;
         }
-        return \Auth::user();
+        return \Auth::user()->makeVisible('hash');
     }
 
     /**

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\Role;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -17,20 +19,30 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        User::where('hash', $id)->update($request->all());
-        return User::where('hash', $id)->first();
+        if ($id != Auth::id()) {
+            return Auth::user();
+        }
+        $user = User::find($id);
+        $user->update($request->all());
+        return $user->fresh()->makeVisible('hash');
     }
 
     public function loginhash(Request $request)
     {
-        return Auth::user();
+        return Auth::user()->makeVisible('hash');
     }
 
     public function getstat(Request $request)
     {
         $group_id = $request->group_id;
 
-        $userInfo = User::where('hash', $request->hash)
+        $can = \DB::table('group_user')->where([['group_id', $group_id], ['user_id', Auth::id()]])->count();
+
+        if (!$can) {
+            return new Response(["У вас нет доступа"], 422);
+        }
+
+        $userInfo = User::where('id', $request->id)
         ->withSum(['orders:price as credit' => function ($query) use ($group_id) {
             $query->where('group_id', $group_id);
         }])
@@ -47,9 +59,9 @@ class UserController extends Controller
             $query->where('group_id', $group_id);
         }])->first();
 
-        $userInfo->total = (int)$userInfo->debit - (int)$userInfo->credit;
-
         if ($userInfo) {
+            $userInfo->total = (int)$userInfo->debit - (int)$userInfo->credit;
+
             $is_owner = $userInfo->owner == $userInfo->id ? true : false;
             $userInfo["roles"] = Role::when(!$is_owner, function ($query) use ($group_id, $userInfo) {
                 return $query->withCount(['acceses' => function ($query) use ($group_id, $userInfo) {

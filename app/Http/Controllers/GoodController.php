@@ -20,16 +20,6 @@ class GoodController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -37,30 +27,9 @@ class GoodController extends Controller
      */
     public function store(GoodRequest $request)
     {
+        $this->checkCan($request->group_id);
         Good::create($request->all());
         return ['success' => true];
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -72,6 +41,7 @@ class GoodController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->checkCan($request->group_id);
         Good::where('id', $id)->update($request->all());
         return ['success' => true];
     }
@@ -84,7 +54,19 @@ class GoodController extends Controller
      */
     public function destroy($id)
     {
-        Good::where('id', $id)->delete();
-        return Group::auth()->whereHas('goods')->with('goods')->get();
+        $good = Good::find($id);
+        if ($good) {
+            $this->checkCan($good->group_id);
+            $good->delete();
+        }
+        return $this->index();
+    }
+
+    private function checkCan($id)
+    {
+        $group = Group::auth()->find($id);
+        if (!$group) {
+            abort(422, "У вас нет доступа");
+        }
     }
 }

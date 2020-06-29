@@ -38,7 +38,7 @@ class LoginController extends Controller
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
         }
-        return \Auth::user();
+        return \Auth::user()->makeVisible('hash');
     }
 
     protected function sendFailedLoginResponse(Request $request)

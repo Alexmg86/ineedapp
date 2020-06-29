@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use App\Payment;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -16,9 +18,14 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::where('hash', $request->hash)->first();
-        $payment = new Payment($request->all());
-        return $user->payments()->save($payment);
+        $this->checkCan($request->group_id);
+        $user = User::whereHas('groups', function (Builder $query) use ($request) {
+            $query->where('id', $request->group_id);
+        })->find($request->user_id);
+        if ($user) {
+            $payment = new Payment($request->all());
+            return $user->payments()->save($payment);
+        }
     }
 
     /**
@@ -30,7 +37,11 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return Payment::find($id)->update(['payment' => $request->payment]);
+        $payment = Payment::find($id);
+        if ($payment) {
+            $this->checkCan($payment->group_id);
+            return $payment->update(['payment' => $request->payment]);
+        }
     }
 
     /**
@@ -43,8 +54,17 @@ class PaymentController extends Controller
     {
         $payment = Payment::find($id);
         if ($payment) {
+            $this->checkCan($payment->group_id);
             return $payment->delete();
         }
         return false;
+    }
+
+    private function checkCan($id)
+    {
+        $group = Group::auth()->find($id);
+        if (!$group) {
+            abort(422, "У вас нет доступа");
+        }
     }
 }
