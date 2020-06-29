@@ -52,7 +52,7 @@ class GroupController extends Controller
         $stat = [];
         $group = $this->checkCan($id);
         $data = $group->with(['users' => function ($query) use ($id) {
-            $query->select('name', 'hash', 'email')
+            $query->select('name', 'id', 'email')
             ->withSum(['orders:price as credit' => function (Builder $query) use ($id) {
                 $query->where('group_id', $id);
             }])
