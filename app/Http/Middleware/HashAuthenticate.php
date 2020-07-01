@@ -15,7 +15,7 @@ class HashAuthenticate
     public function handle($request, Closure $next)
     {
         if (!\Auth::check()) {
-            $user = User::where('hash', request('hash'))->first();
+            $user = User::where('hash', $request->header('hash'))->first();
             if ($user) {
                 \Auth::login($user);
             }
