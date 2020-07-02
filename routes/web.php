@@ -21,13 +21,13 @@ Route::get('/', function () {
 });
 
 Route::middleware(['hash'])->group(function () {
+    Route::get('user/loginhash', 'UserController@loginhash');
     Route::resource('access', 'AccessController');
     Route::resource('good', 'GoodController');
     Route::resource('group', 'GroupController');
     Route::resource('order', 'OrderController');
     Route::resource('user', 'UserController');
     Route::resource('payment', 'PaymentController');
-    Route::post('user/loginhash', 'UserController@loginhash');
     Route::post('user/getstat', 'UserController@getstat');
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
