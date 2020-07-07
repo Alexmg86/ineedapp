@@ -110,6 +110,11 @@ class GroupController extends Controller
         return $this->getItems();
     }
 
+    public function forShop()
+    {
+        return Group::shop()->get();
+    }
+
     public function getItems()
     {
         $items = Group::auth()->withCount('usersActive as count')->get();

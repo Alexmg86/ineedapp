@@ -24,12 +24,18 @@ class Group extends Model
         'goods',
         'count',
         'users',
-        'owner'
+        'owner',
+        'access'
     ];
 
     public function goods()
     {
         return $this->hasMany('App\Good');
+    }
+
+    public function access()
+    {
+        return $this->hasMany('App\Access', 'group_id', 'id');
     }
 
     public function users()
@@ -49,6 +55,18 @@ class Group extends Model
                 return $query->where('hash', $hash);
             }, function ($query) {
                 return $query->where('id', \Auth::id());
+            });
+        });
+    }
+
+    public function scopeShop($query, $hash = null)
+    {
+        $userId = \Auth::id();
+        return $query->whereHas('users', function (Builder $query) use ($userId) {
+            $query->where('id', $userId);
+        })->where(function ($query) use ($userId) {
+            $query->where('owner', $userId)->orWhereHas('access', function (Builder $query) use ($userId) {
+                $query->where([['user_id', $userId], ['role_id', 1]]);
             });
         });
     }

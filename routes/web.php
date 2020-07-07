@@ -24,6 +24,7 @@ Route::middleware(['hash'])->group(function () {
     Route::get('user/loginhash', 'UserController@loginhash');
     Route::resource('access', 'AccessController');
     Route::resource('good', 'GoodController');
+    Route::get('group/shop', 'GroupController@forShop');
     Route::resource('group', 'GroupController');
     Route::resource('order', 'OrderController');
     Route::resource('user', 'UserController');
