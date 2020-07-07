@@ -35,7 +35,7 @@ class Order extends Model
 
     public function goods()
     {
-        return $this->belongsTo('App\Good', 'good_id', 'id');
+        return $this->belongsTo('App\Good', 'good_id', 'id')->withTrashed();
     }
 
     public function users()
