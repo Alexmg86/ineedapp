@@ -51,7 +51,7 @@ class GroupController extends Controller
     {
         $stat = [];
         $group = $this->checkCan($id);
-        $data = $group->with(['users' => function ($query) use ($id) {
+        $data = $group->load(['users' => function ($query) use ($id) {
             $query->select('name', 'id', 'email')
             ->withSum(['orders:price as credit' => function (Builder $query) use ($id) {
                 $query->where('group_id', $id);
@@ -59,7 +59,7 @@ class GroupController extends Controller
             ->withSum(['payments:payment as debit' => function (Builder $query) use ($id) {
                 $query->where('group_id', $id);
             }]);
-        }])->first();
+        }]);
 
         $stat['user'] = null;
         $maxCredit = $data->users->sortByDesc('credit')->first();
